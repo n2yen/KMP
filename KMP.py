@@ -12,37 +12,51 @@
 #
 
 def KMP_strstr(text, target):
-    def init_state_table(word):
+    # By checking the largest word suffix which matches the word prefix, we can
+    # generate a 'prefix table' that can then be used as a state machine, where 0 is the 
+    # initial state and the last character in the table being the accpeting state.
+    # 
+    # We generate the prefix table by maintaining a running count of character matches
+    # starting from the 2nd character as we are walking the word character by character.
+    #
+    # The reason this works is because of the prefix count reveals how many prefix
+    # matches at any point in the string. The prefix matches will let us know where in
+    # the word to jump to (state change) if we see a mismatch as we are actually
+    # matching the word.
+    #
+
+    def init_prefix_table(word):
         prefix_count = 0
-        state_table = [0]*len(word)
+        prefix_table = [0]*len(word)
         # start from the 2nd character
         for i in range(1, len(word)):
             if word[i] == word[prefix_count]:
                 prefix_count+=1
             else:
                 prefix_count = 0
-            state_table[i] = prefix_count
-        return state_table
+            prefix_table[i] = prefix_count
+        return prefix_table
 
-    state_table = init_state_table(target)
-    #print state_table
+    prefix_table = init_prefix_table(target)
+    #print prefix_table
 
-    # now that we have a prefix table created, we can do the string matching
-    start = cmp_state = i = 0
+    # now that we have the state_table (aka prefix table) created, we can do the string matching
+    # using it as a guide for state transitions
+    start = state = i = 0
     for i in range(len(text)):
         # Check for failure, if failure, then transition to the correct 
         # intermediate state. If no intermediate state is found, then we will go 
         # to the initial state and thus exit the while loop
-        while cmp_state > 0 and text[i] != target[cmp_state]:
-            cmp_state = state_table[cmp_state-1]
+        while state > 0 and text[i] != target[state]:
+            state = prefix_table[state-1]
 
-        # we've updated cmp_state so, we need to update new start location
-        start = i-cmp_state 
-        if text[i] == target[cmp_state]:
-            if cmp_state == len(target)-1:
+        # we've updated state so, we need to update new start location
+        start = i-state 
+        if text[i] == target[state]:
+            if state == len(target)-1:
                 return start 
             # update the automaton state
-            cmp_state+=1
+            state+=1
 
     return -1
 
