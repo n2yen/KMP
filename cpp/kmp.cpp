@@ -51,6 +51,8 @@ int kmp_match(string text, string pattern) {
             state++;
         }
     }
+    
+    delete[] prefix_table;
 
     return -1;
 }

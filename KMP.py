@@ -11,7 +11,7 @@
 # function will not find the target
 #
 
-def KMP_strstr(text, target):
+def kmp_match(text, target):
     # By checking the largest word suffix which matches the word prefix, we can
     # generate a 'prefix table' that can then be used as a state machine, where 0 is the 
     # initial state and the last character in the table being the accpeting state.
@@ -19,7 +19,7 @@ def KMP_strstr(text, target):
     # We generate the prefix table by maintaining a running count of character matches
     # starting from the 2nd character as we are walking the word character by character.
     #
-    # The reason this works is because of the prefix count reveals how many prefix
+    # The reason this works is because the prefix count reveals how many prefix
     # matches at any point in the string. The prefix matches will let us know where in
     # the word to jump to (state change) if we see a mismatch as we are actually
     # matching the word.
@@ -44,7 +44,7 @@ def KMP_strstr(text, target):
     # using it as a guide for state transitions
     start = state = i = 0
     for i in range(len(text)):
-        # Check for failure, if failure, then transition to the correct 
+        # Check for failure; if failure, then transition to the correct 
         # intermediate state. If no intermediate state is found, then we will go 
         # to the initial state and thus exit the while loop
         while state > 0 and text[i] != target[state]:
@@ -66,7 +66,7 @@ def main():
 
     Input = 'y ababaca siifjae', 'ababaca'
     print Input
-    res = KMP_strstr(Input[0], Input[1])
+    res = kmp_match(Input[0], Input[1])
     print 'len:', len(Input[1])
     print 'result:', res, "'{}'".format(Input[0][res:res+len(Input[1])])
     assert Input[0][res:res+len(Input[1])] == Input[1]
@@ -75,17 +75,16 @@ def main():
 
     Input = 'y ababac siifjae', 'ababac'
     print Input
-    res = KMP_strstr(Input[0], Input[1])
+    res = kmp_match(Input[0], Input[1])
     print 'len:', len(Input[1])
     print res, "'{}'".format(Input[0][res:res+len(Input[1])])
     assert Input[0][res:res+len(Input[1])] == Input[1]
     print 'correct:', Input[0].find(Input[1])
     assert res == Input[0].find(Input[1])
-    #return
 
     Input = 'abababacsiifjae', 'ababac'
     print Input
-    res = KMP_strstr(Input[0], Input[1])
+    res = kmp_match(Input[0], Input[1])
     print 'len:', len(Input[1])
     print res, "'{}'".format(Input[0][res:res+len(Input[1])])
     print 'correct:', Input[0].find(Input[1])
@@ -93,29 +92,28 @@ def main():
     assert res == Input[0].find(Input[1])
 
     Input = 'adfbec dsfoeifj asdfjww abyyabcdefg siifjae', 'aba'
-    res = KMP_strstr(Input[0], Input[1])
+    res = kmp_match(Input[0], Input[1])
     print 'len:', len(Input[1])
     print res 
     print 'correct:', Input[0].find(Input[1])
     assert res == Input[0].find(Input[1])
-    #return
 
     Input = 'adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae', 'ab'
-    res = KMP_strstr(Input[0], Input[1])
+    res = kmp_match(Input[0], Input[1])
     print 'len:', len(Input[1])
     print res, "'{}'".format(Input[0][res:res+len(Input[1])])
     print 'correct:', Input[0].find(Input[1])
-    #assert res == Input[0].find(Input[1])
+    assert res == Input[0].find(Input[1])
 
     Input = 'adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae', 'a'
-    res = KMP_strstr(Input[0], Input[1])
+    res = kmp_match(Input[0], Input[1])
     print 'len:', len(Input[1])
     print res, "'{}'".format(Input[0][res:res+len(Input[1])])
     print 'correct:', Input[0].find(Input[1])
     assert res == Input[0].find(Input[1])
 
     Input = 'adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae', 'aa'
-    res = KMP_strstr(Input[0], Input[1])
+    res = kmp_match(Input[0], Input[1])
     print 'len:', len(Input[1])
     print res, "'{}'".format(Input[0][res:res+len(Input[1])])
     print 'correct:', Input[0].find(Input[1])

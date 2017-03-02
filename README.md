@@ -1,4 +1,4 @@
-# Knuth-Morris Pratt Algorithm
+# Knuth-Morris-Pratt Algorithm
 
 An implementation of the Knuth-Morris-Pratt Algorithm on string matching with detailed explanations.
 I found this algorithm difficult to understand at first, especially how exactly to utilize the 'prefix table'. 
