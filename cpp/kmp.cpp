@@ -71,7 +71,7 @@ int main(void) {
     };
 
     int i = 0;
-    while (i < v.size()) {
+    while (i+1 < v.size()) {
         string text = v[i++];
         string pattern = v[i++];
 
