@@ -5,13 +5,13 @@
 # Algorithm creates a text table for use with searches. 
 #
 # Running Time is O(n+m), where 'n' is length of the searched text (typically large)
-# and 'm' is the length of target (or pattern, typically small).
+# and 'm' is the length of pattern (or pattern, typically small).
 #
-# Assumptions: length of target <= length of text, e.g. m <= n, otherwise 
-# function will not find the target
+# Assumptions: length of pattern <= length of text, e.g. m <= n, otherwise 
+# function will not find the pattern
 #
 
-def kmp_match(text, target):
+def kmp_match(text, pattern):
     # By checking the largest word suffix which matches the word prefix, we can
     # generate a 'prefix table' that can then be used as a state machine, where 0 is the 
     # initial state and the last character in the table being the accpeting state.
@@ -37,26 +37,25 @@ def kmp_match(text, target):
             prefix_table[i] = prefix_count
         return prefix_table
 
-    prefix_table = init_prefix_table(target)
+    prefix_table = init_prefix_table(pattern)
     #print prefix_table
 
     # now that we have the state_table (aka prefix table) created, we can do the string matching
     # using it as a guide for state transitions
-    start = state = i = 0
-    for i in range(len(text)):
+    pattern_index = 0
+    for i, ch in enumerate(text):
         # Check for failure; if failure, then transition to the correct 
         # intermediate state. If no intermediate state is found, then we will go 
         # to the initial state and thus exit the while loop
-        while state > 0 and text[i] != target[state]:
-            state = prefix_table[state-1]
+        # the state variable also informs the correct index into the pattern string
+        while pattern_index > 0 and ch != pattern[pattern_index]:
+            pattern_index = prefix_table[pattern_index-1]
 
-        # we've updated state so, we need to update new start location
-        start = i-state 
-        if text[i] == target[state]:
-            if state == len(target)-1:
-                return start 
-            # update the automaton state
-            state+=1
+        if ch == pattern[pattern_index]:
+            if pattern_index == len(pattern)-1:
+                return i-pattern_index
+            # update the automaton pattern_index
+            pattern_index+=1
 
     return -1
 
@@ -118,7 +117,14 @@ def main():
     print res, "'{}'".format(Input[0][res:res+len(Input[1])])
     print 'correct:', Input[0].find(Input[1])
     assert res == Input[0].find(Input[1])
-
+    
+    Input = "ababac", "ababac",
+    res = kmp_match(Input[0], Input[1])
+    print 'len:', len(Input[1])
+    print res, "'{}'".format(Input[0][res:res+len(Input[1])])
+    print 'correct:', Input[0].find(Input[1])
+    assert res == Input[0].find(Input[1])
+ 
 
 if __name__ == "__main__":
     main()

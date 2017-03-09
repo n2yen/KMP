@@ -67,7 +67,8 @@ int main(void) {
         "adfbec dsfoeifj asdfjww abyyabcdefg siifjae", "aba",
         "adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae", "ab", 
         "adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae", "a", 
-        "adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae", "aa"
+        "adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae", "aa",
+        "ababac", "ababac",
     };
 
     int i = 0;
