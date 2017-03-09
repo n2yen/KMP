@@ -43,17 +43,17 @@ def kmp_match(text, pattern):
     # now that we have the state_table (aka prefix table) created, we can do the string matching
     # using it as a guide for state transitions
     pattern_index = 0
-    for i, ch in enumerate(text):
+    for text_index, text_ch in enumerate(text):
         # Check for failure; if failure, then transition to the correct 
         # intermediate state. If no intermediate state is found, then we will go 
         # to the initial state and thus exit the while loop
         # the state variable also informs the correct index into the pattern string
-        while pattern_index > 0 and ch != pattern[pattern_index]:
+        while pattern_index > 0 and text_ch != pattern[pattern_index]:
             pattern_index = prefix_table[pattern_index-1]
 
-        if ch == pattern[pattern_index]:
+        if text_ch == pattern[pattern_index]:
             if pattern_index == len(pattern)-1:
-                return i-pattern_index
+                return text_index-pattern_index
             # update the automaton pattern_index
             pattern_index+=1
 
