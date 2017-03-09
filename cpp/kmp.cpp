@@ -32,23 +32,23 @@ int kmp_match(string text, string pattern) {
     }
     cout << endl;
 
-    int start, state; 
-    start = state = 0;
+    int pattern_index = 0;
 
     for (int i = 0; i < text.size(); i++) {
-        while (state > 0 and text[i] != pattern[state]) {
-            state = prefix_table[state-1];
-            //cout << "state: " << state << endl;
+        while (pattern_index > 0 and text[i] != pattern[pattern_index]) {
+            pattern_index = prefix_table[pattern_index-1];
+            //cout << "pattern_index: " << pattern_index << endl;
         }
-        start = i-state;
 
         // At this point we should be in a valid state
         // check if we have a match at the new pointer position
-        if (text[i] == pattern[state]) {
-            if (state == pattern.size()-1) {
-                return start;
+        if (text[i] == pattern[pattern_index]) {
+            if (pattern_index == pattern.size()-1) {
+                return i-pattern_index;
+                // alternatively the below would work also:
+                //return i-pattern.size()+1;
             }
-            state++;
+            pattern_index++;
         }
     }
     
