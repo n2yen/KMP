@@ -7,36 +7,36 @@
 using namespace std;
 
 void init_prefix_table(string pattern, int*& table) {
-    int prefix_count = 0;
-
     //cout << "initializing prefix table: ";
-    for (int i = 1; i < pattern.size(); i++) {
-        if (pattern[i] == pattern[prefix_count]) {
-            prefix_count++;
+    table[0] = -1;
+    int i = 0, j = -1;
+    while (i < pattern.length()) {
+        if (j == -1 or pattern[i] == pattern[j]) {
+            i++;
+            j++;
+            table[i] = j;
         } else {
-            prefix_count = 0;
+            j = table[j];
         }
-        table[i] = prefix_count;
     }
-    //cout << endl;
+    cout << endl;
 }
 
 int kmp_match(string text, string pattern) {
-    int *prefix_table = new int[pattern.size()];
+    int *prefix_table = new int[pattern.size()+1]();
     init_prefix_table(pattern, prefix_table);
 
     // check the prefix table
     cout << "pattern: " << pattern << " size: " << pattern.size() << " len:" << pattern.length() << endl;
-    for (int i = 0; i < pattern.size(); i++) {
+    for (int i = 1; i < pattern.size()+1; i++) {
         cout << prefix_table[i] ;
     }
     cout << endl;
 
     int pattern_index = 0;
-
     for (int i = 0; i < text.size(); i++) {
         while (pattern_index > 0 and text[i] != pattern[pattern_index]) {
-            pattern_index = prefix_table[pattern_index-1];
+            pattern_index = prefix_table[pattern_index];
             //cout << "pattern_index: " << pattern_index << endl;
         }
 
@@ -51,7 +51,7 @@ int kmp_match(string text, string pattern) {
             pattern_index++;
         }
     }
-    
+
     delete[] prefix_table;
 
     return -1;
@@ -60,15 +60,17 @@ int kmp_match(string text, string pattern) {
 int main(void) {
     cout << "Knuth Morris Pratt (KMP) string search algorithm" << endl;
 
-    vector<string> v = { 
+    vector<string> v = {
         "y ababaca siifjae", "ababaca",
         "y ababac siifjae", "ababac",
         "abababacsiifjae", "ababac",
         "adfbec dsfoeifj asdfjww abyyabcdefg siifjae", "aba",
-        "adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae", "ab", 
-        "adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae", "a", 
+        "adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae", "ab",
+        "adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae", "a",
         "adfbec dsfoeifj asdfjww sifmyy abcdefg siifjae", "aa",
         "ababac", "ababac",
+        "aabaaabaaac", "aabaaac",
+        "bacbababaabcbab", "ababababca"
     };
 
     int i = 0;
